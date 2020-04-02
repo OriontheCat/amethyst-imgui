@@ -3,7 +3,10 @@ name = "amethyst-imgui"
 version = "0.6.1"
 description = "imgui library for amethyst"
 license = "CC0-1.0"
-authors = ["Awpteamoose <cargo@awpteamoose.my.to>", "Walter Pearce <jaynus@gmail.com>"]
+authors = [
+    "Awpteamoose <cargo@awpteamoose.my.to>",
+    "Walter Pearce <jaynus@gmail.com>"
+]
 repository = "https://github.com/jaynus/amethyst-imgui"
 readme = "README.md"
 edition = "2018"
@@ -14,19 +17,18 @@ shader-compiler = ["amethyst/shader-compiler"]
 docking = []
 
 [dependencies]
-imgui = { version = "0.2" }
-imgui-winit-support = { version = "0.2" }
-amethyst = { version = "0.14" }
-
+imgui = { version = "0.3.0" }
+imgui-winit-support = { version = "0.3.1", default-features = false, features = [
+    "winit-19"
+] }
+amethyst = { version = "0.15" }
 # Development dependencies
 #amethyst = { path = "../amethyst", features = ["saveload", "vulkan", "gltf", "experimental-spirv-reflection", "shader-compiler", "tiles"] }
 #imgui = { path = "../imgui-rs" }
 #imgui-winit-support = { path = "../imgui-rs/imgui-winit-support" }
-
 # Docking dependencies
 #imgui = { git = "https://github.com/jaynus/imgui-rs.git" }
 #imgui-winit-support = { git = "https://github.com/jaynus/imgui-rs.git" }
-
 lazy_static = "1.4"
 derivative = "1.0"
 failure = "0.1"

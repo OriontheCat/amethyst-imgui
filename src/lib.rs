@@ -56,19 +56,19 @@ impl<'s, T: BindingTypes> System<'s> for ImguiInputSystem<T> {
 		}
 		for input in input_events.read(&mut self.input_reader) {
 			match input {
-				InputEvent::MouseMoved { .. } |
-				InputEvent::MouseButtonPressed(_) |
-				InputEvent::MouseButtonReleased(_) |
-				InputEvent::MouseWheelMoved(_) => {
+				InputEvent::MouseMoved { .. }
+				| InputEvent::MouseButtonPressed(_)
+				| InputEvent::MouseButtonReleased(_)
+				| InputEvent::MouseWheelMoved(_) => {
 					if !context.io().want_capture_mouse {
 						filtered_events.single_write(FilteredInputEvent(input.clone()));
 					}
-				},
+				}
 				InputEvent::KeyPressed { .. } | InputEvent::KeyReleased { .. } => {
 					if !context.io().want_capture_keyboard {
 						filtered_events.single_write(FilteredInputEvent(input.clone()));
 					}
-				},
+				}
 				_ => filtered_events.single_write(FilteredInputEvent(input.clone())),
 			}
 		}
@@ -108,7 +108,7 @@ impl<'a, 'b, T: BindingTypes> SystemDesc<'a, 'b, ImguiInputSystem<T>> for ImguiI
 		context.io_mut().config_flags |= self.config_flags;
 
 		let mut platform = WinitPlatform::init(&mut context);
-		platform.attach_window(context.io_mut(), &world.fetch::<Window>(), HiDpiMode::Default);
+		platform.attach_window(context.io_mut(), &*world.fetch::<Window>(), HiDpiMode::Default);
 
 		world.insert(Arc::new(Mutex::new(ImguiState {
 			context,
@@ -133,7 +133,9 @@ pub fn with(f: impl FnOnce(&imgui::Ui)) {
 	}
 }
 
-pub unsafe fn current_ui<'a>() -> Option<&'a imgui::Ui<'a>> { CURRENT_UI.as_ref() }
+pub unsafe fn current_ui<'a>() -> Option<&'a imgui::Ui<'a>> {
+	CURRENT_UI.as_ref()
+}
 
 /// A [RenderPlugin] for rendering Imgui elements.
 #[derive(Derivative)]

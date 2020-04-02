@@ -12,9 +12,7 @@ use amethyst::{
 			factory::Factory,
 			graph::{
 				render::{PrepareResult, RenderGroup, RenderGroupDesc},
-				GraphContext,
-				NodeBuffer,
-				NodeImage,
+				GraphContext, NodeBuffer, NodeImage,
 			},
 			hal::{
 				self,
@@ -29,8 +27,7 @@ use amethyst::{
 		},
 		submodules::{DynamicIndexBuffer, DynamicVertexBuffer, TextureId, TextureSub},
 		types::{Backend, TextureData},
-		util,
-		Texture,
+		util, Texture,
 	},
 	shrev::{EventChannel, ReaderId},
 	window::Window,
@@ -109,7 +106,9 @@ impl<T> From<T> for ImguiColor
 where
 	T: Into<u32>,
 {
-	fn from(from: T) -> Self { ImguiColor(from.into()) }
+	fn from(from: T) -> Self {
+		ImguiColor(from.into())
+	}
 }
 impl AsAttribute for ImguiColor {
 	const FORMAT: hal::format::Format = hal::format::Format::Rgba32Uint;
@@ -128,11 +127,17 @@ impl ImguiPushConstant {
 		}
 	}
 
-	pub fn raw(&self) -> &[f32] { &self.inner.data }
+	pub fn raw(&self) -> &[f32] {
+		&self.inner.data
+	}
 
-	pub fn scale(&self) -> Vector2<f32> { Vector2::new(self.inner.x, self.inner.y) }
+	pub fn scale(&self) -> Vector2<f32> {
+		Vector2::new(self.inner.x, self.inner.y)
+	}
 
-	pub fn translation(&self) -> Vector2<f32> { Vector2::new(self.inner.z, self.inner.w) }
+	pub fn translation(&self) -> Vector2<f32> {
+		Vector2::new(self.inner.z, self.inner.w)
+	}
 
 	pub fn set_scale(&mut self, scale: Vector2<f32>) {
 		self.inner.x = scale.x;
@@ -164,7 +169,9 @@ pub struct ImguiArgs {
 }
 
 impl AsVertex for ImguiArgs {
-	fn vertex() -> VertexFormat { VertexFormat::new((TexCoord::vertex(), TexCoord::vertex(), Color::vertex())) }
+	fn vertex() -> VertexFormat {
+		VertexFormat::new((TexCoord::vertex(), TexCoord::vertex(), Color::vertex()))
+	}
 }
 
 impl From<imgui::DrawVert> for ImguiArgs {
@@ -194,7 +201,9 @@ pub struct DrawImguiDesc;
 
 impl DrawImguiDesc {
 	/// Create instance of `DrawImgui` render group
-	pub fn new() -> Self { Default::default() }
+	pub fn new() -> Self {
+		Default::default()
+	}
 
 	fn generate_upload_font_textures(&self, world: &World, mut fonts: imgui::FontAtlasRefMut) -> Handle<Texture> {
 		let tex = fonts.build_rgba32_texture();
@@ -316,6 +325,7 @@ impl<B: Backend> RenderGroup<B, World> for DrawImgui<B> {
 			ReadExpect<'_, Arc<Mutex<ImguiState>>>,
 			Read<'_, EventChannel<Event>>,
 		)>::fetch(world);
+		let window = &*window;
 
 		let mut state = state_mutex.lock().unwrap();
 
@@ -329,7 +339,7 @@ impl<B: Backend> RenderGroup<B, World> for DrawImgui<B> {
 			None => {
 				self.textures.maintain(factory, world);
 				return PrepareResult::DrawRecord;
-			},
+			}
 		};
 
 		let texture_map = state
@@ -424,7 +434,7 @@ impl<B: Backend> RenderGroup<B, World> for DrawImgui<B> {
 									},
 								});
 							}
-						},
+						}
 						DrawCmd::ResetRenderState => (), // TODO
 						DrawCmd::RawCallback { callback, raw_cmd } => unsafe { callback(draw_list.raw(), raw_cmd) },
 					}
@@ -540,9 +550,9 @@ fn build_imgui_pipeline<B: Backend>(
 					scissor: None,
 					..Default::default()
 				})
-				.with_blend_targets(vec![pso::ColorBlendDesc { 
-					mask:  pso::ColorMask::ALL, 
-					blend: Some(pso::BlendState::ALPHA) 
+				.with_blend_targets(vec![pso::ColorBlendDesc {
+					mask: pso::ColorMask::ALL,
+					blend: Some(pso::BlendState::ALPHA),
 				}])
 				.with_depth_test(pso::DepthTest::PASS_TEST),
 		)
@@ -559,7 +569,7 @@ fn build_imgui_pipeline<B: Backend>(
 				factory.device().destroy_pipeline_layout(pipeline_layout);
 			}
 			Err(e)
-		},
+		}
 		Ok(mut pipes) => Ok((pipes.remove(0), pipeline_layout)),
 	}
 }
