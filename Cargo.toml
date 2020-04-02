@@ -21,7 +21,7 @@ imgui = { version = "0.3.0" }
 imgui-winit-support = { version = "0.3.1", default-features = false, features = [
     "winit-19"
 ] }
-amethyst = { version = "0.15" }
+amethyst = { version = "0.15.0" }
 # Development dependencies
 #amethyst = { path = "../amethyst", features = ["saveload", "vulkan", "gltf", "experimental-spirv-reflection", "shader-compiler", "tiles"] }
 #imgui = { path = "../imgui-rs" }
